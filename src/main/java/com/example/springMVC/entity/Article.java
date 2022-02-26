@@ -5,9 +5,8 @@
 
 package com.example.springMVC.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +17,8 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @ToString
 @NoArgsConstructor // 디폴트 생성자 추가
+@Getter
+@Setter
 public class Article {
     @Id
     @GeneratedValue

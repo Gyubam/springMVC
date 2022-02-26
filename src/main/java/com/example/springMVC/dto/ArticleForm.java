@@ -6,21 +6,19 @@
 package com.example.springMVC.dto;
 
 import com.example.springMVC.entity.Article;
+import lombok.AllArgsConstructor;
+import lombok.ToString;
 
+@ToString
+@AllArgsConstructor
 public class ArticleForm {
+
+    private Long id;
     private String title;
     private String content;
 
     public Article toEntity() {
-        return new Article((Long)null, this.title, this.content);
+        return new Article(id, title, content);
     }
 
-    public ArticleForm(final String title, final String content) {
-        this.title = title;
-        this.content = content;
-    }
-
-    public String toString() {
-        return "ArticleForm(title=" + this.title + ", content=" + this.content + ")";
-    }
 }

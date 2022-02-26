@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
+
 @Controller
 public class ArticleController {
     private static final Logger log = LoggerFactory.getLogger(ArticleController.class);
@@ -36,17 +38,17 @@ public class ArticleController {
 
     @PostMapping({"/articles/create"})
     public String createArticle(ArticleForm form) {
-        log.info(form.toString());
+//        log.info(form.toString());
         Article article = form.toEntity();
-        log.info(article.toString());
+//        log.info(article.toString());
         Article saved = (Article)this.articleRepository.save(article);
-        log.info(saved.toString());
-        return "";
+//        log.info(saved.toString());
+        return "redirect:/articles/" + saved.getId();
     }
 
     @GetMapping("/articles/{id}")
     public String show(@PathVariable Long id, Model model){
-        log.info("id = "+ id);
+//        log.info("id = "+ id);
 
         // 1. id를 데이터로 가져옴
         Article articleEntity = articleRepository.findById(id).orElse(null);
@@ -59,12 +61,45 @@ public class ArticleController {
     }
 
     @GetMapping("/articles")
-    public String index(){
+    public String index(Model model){
 
         // 1. 모든 article 가져온다
+        List<Article> articleEntityList = articleRepository.findAll();
+
+        // 2. 가져온 Article 묶음을 뷰로 전달!
+        model.addAttribute("articleList", articleEntityList);
+
+        return "articles/index";
+    }
+
+    @GetMapping("/articles/{id}/edit")
+    public String edit(@PathVariable Long id, Model model) {
+        Article articleEntity = articleRepository.findById(id).orElse(null);
+
+        model.addAttribute("article", articleEntity);
 
 
+        return "articles/edit";
+    }
 
-        return "";
+    @PostMapping("/articles/update")
+    public String update(ArticleForm form) {
+
+//        log.info(form.toString());
+
+        // 1. dto를 엔티티로 변환한다
+        Article articleEntity = form.toEntity();
+
+        // 2. 엔티티를 db로 저장한다
+        // 2-1. db에서 기존 데이터를 가져온다
+        Article target = articleRepository.findById(articleEntity.getId()).orElse(null);
+
+        // 2-2. 기존 데이터의 값을 갱신한다
+        if(target!=null){
+            articleRepository.save(articleEntity);
+        }
+
+
+        return "redirect:/articles/"+ articleEntity.getId();
     }
 }

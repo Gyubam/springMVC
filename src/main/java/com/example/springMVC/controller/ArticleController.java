@@ -14,9 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.SpringVersion;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -41,13 +43,13 @@ public class ArticleController {
 //        log.info(form.toString());
         Article article = form.toEntity();
 //        log.info(article.toString());
-        Article saved = (Article)this.articleRepository.save(article);
+        Article saved = (Article) this.articleRepository.save(article);
 //        log.info(saved.toString());
         return "redirect:/articles/" + saved.getId();
     }
 
     @GetMapping("/articles/{id}")
-    public String show(@PathVariable Long id, Model model){
+    public String show(@PathVariable Long id, Model model) {
 //        log.info("id = "+ id);
 
         // 1. id를 데이터로 가져옴
@@ -61,7 +63,7 @@ public class ArticleController {
     }
 
     @GetMapping("/articles")
-    public String index(Model model){
+    public String index(Model model) {
 
         // 1. 모든 article 가져온다
         List<Article> articleEntityList = articleRepository.findAll();
@@ -95,11 +97,25 @@ public class ArticleController {
         Article target = articleRepository.findById(articleEntity.getId()).orElse(null);
 
         // 2-2. 기존 데이터의 값을 갱신한다
-        if(target!=null){
+        if (target != null) {
             articleRepository.save(articleEntity);
+        }
+        return "redirect:/articles/" + articleEntity.getId();
+    }
+
+    @GetMapping("/articles/{id}/delete")
+    public String delete(@PathVariable Long id, RedirectAttributes rttr){
+
+        // 1. 삭제 대상을 가져온다
+        Article target = articleRepository.findById(id).orElse(null);
+
+        // 2. 대상을 삭제한다
+        if (target != null) {
+            articleRepository.delete(target);
+            rttr.addFlashAttribute("msg","삭제가 완료되었습니다.");
         }
 
 
-        return "redirect:/articles/"+ articleEntity.getId();
+        return "redirect:/articles";
     }
 }

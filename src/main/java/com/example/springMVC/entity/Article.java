@@ -5,12 +5,19 @@
 
 package com.example.springMVC.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-@Entity
+@Entity // DB가 인식
+@AllArgsConstructor
+@ToString
+@NoArgsConstructor // 디폴트 생성자 추가
 public class Article {
     @Id
     @GeneratedValue
@@ -20,13 +27,5 @@ public class Article {
     @Column
     private String content;
 
-    public Article(final Long id, final String title, final String content) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-    }
 
-    public String toString() {
-        return "Article(id=" + this.id + ", title=" + this.title + ", content=" + this.content + ")";
-    }
 }

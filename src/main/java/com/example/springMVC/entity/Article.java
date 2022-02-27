@@ -8,10 +8,7 @@ package com.example.springMVC.entity;
 import lombok.*;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity // DB가 인식
 @AllArgsConstructor
@@ -21,7 +18,7 @@ import javax.persistence.Id;
 @Setter
 public class Article {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //DB가 id를 자동 생성 어노테이션
     private Long id;
     @Column
     private String title;

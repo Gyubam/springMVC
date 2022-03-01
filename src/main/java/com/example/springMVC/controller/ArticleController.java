@@ -6,8 +6,11 @@
 package com.example.springMVC.controller;
 
 import com.example.springMVC.dto.ArticleForm;
+import com.example.springMVC.dto.CommentDto;
 import com.example.springMVC.entity.Article;
 import com.example.springMVC.repository.ArticleRepository;
+import com.example.springMVC.repository.CommentRepository;
+import com.example.springMVC.service.CommentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,8 @@ public class ArticleController {
     private static final Logger log = LoggerFactory.getLogger(ArticleController.class);
     @Autowired
     private ArticleRepository articleRepository;
+    @Autowired
+    private CommentService commentService;
 
     public ArticleController() {
     }
@@ -54,9 +59,11 @@ public class ArticleController {
 
         // 1. id를 데이터로 가져옴
         Article articleEntity = articleRepository.findById(id).orElse(null);
+        List<CommentDto> commentDtos = commentService.comments(id);
 
         // 2. 가져온 데이터를 모델에 등록
         model.addAttribute("article", articleEntity);
+        model.addAttribute("commentDtos", commentDtos);
 
         // 3. 보여줄 페이지를 설정
         return "articles/show";

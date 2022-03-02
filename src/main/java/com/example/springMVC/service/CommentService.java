@@ -5,6 +5,7 @@ import com.example.springMVC.entity.Article;
 import com.example.springMVC.entity.Comment;
 import com.example.springMVC.repository.ArticleRepository;
 import com.example.springMVC.repository.CommentRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class CommentService {
 
@@ -46,6 +48,7 @@ public class CommentService {
 
     @Transactional
     public CommentDto create(Long articleId, CommentDto dto) {
+
         // 게시글 조회 및 예외발생
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new IllegalArgumentException("댓글 생성 실패"));
